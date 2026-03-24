@@ -2,10 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/{any}', function () {
-    return file_get_contents(public_path('index.html'));
-})->where('any', '^(?!api).*$');
+Route::get('/{any?}', function () {
+    $path = public_path('index.html');
 
-Route::fallback(function () {
-    return abort(404);
-});
+    if (! file_exists($path)) {
+        abort(404, 'SPA not built yet. Run build.sh to generate the frontend.');
+    }
+
+    return response(file_get_contents($path))
+        ->header('Content-Type', 'text/html');
+})->where('any', '^(?!api|sanctum).*$');

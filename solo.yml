@@ -1,0 +1,38 @@
+# Visit https://soloterm.com to learn more
+name: nuxt-monorepo
+icon: null
+processes:
+  Frontend:
+    command: bun run dev
+    working_dir: ./frontend
+    auto_start: true
+    auto_restart: true
+    restart_when_changed: []
+    env: {}
+  Scheduler:
+    command: php artisan schedule:work
+    working_dir: ./backend
+    auto_start: true
+    auto_restart: true
+    restart_when_changed:
+    - app/
+    - config/
+    - database/
+    - routes/
+    - services/
+    - tests/
+    - .env
+    env: {}
+  Queue:
+    command: php artisan queue:work
+    working_dir: ./backend
+    auto_start: true
+    auto_restart: true
+    restart_when_changed:
+    - app/
+    - config/
+    - database/
+    - routes/
+    - services/
+    - tests/
+    - .env

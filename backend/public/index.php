@@ -5,6 +5,14 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
+// SPA fast path — serve Nuxt shell without booting Laravel
+$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+if (!preg_match('#^/(api|sanctum)#', $path) && file_exists(__DIR__ . '/index.html')) {
+    header('Content-Type: text/html; charset=utf-8');
+    readfile(__DIR__ . '/index.html');
+    exit;
+}
+
 // Determine if the application is in maintenance mode...
 if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
     require $maintenance;
